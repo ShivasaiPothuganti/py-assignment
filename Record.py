@@ -14,12 +14,7 @@ class Record():
         self.locations = []
         self.items = []
         self.creatures = []
-
-        self.load_locations()
-        self.load_items()
-        self.load_creatures()
-        self.set_items_to_locations()
-        self.set_creatures_to_locations()
+        self.load_game()
 
     def load_pymon(self):
         pymon = Pymon('kinimon','white and yellow with a square face.')
@@ -48,9 +43,12 @@ class Record():
                 location.connect(Direction.SOUTH,south_location)
                 self.locations.append(location)
 
-        self.playground = self.get_location_by_name('Playground')
-        self.beach = self.get_location_by_name('Beach')
-        self.school = self.get_location_by_name('School')
+    def load_game(self):
+        self.load_locations()
+        self.load_items()
+        self.load_creatures()
+        self.set_items_to_locations()
+        self.set_creatures_to_locations()
 
     def load_items(self):
 
@@ -66,12 +64,6 @@ class Record():
                 
                 item = Item(item_name,description,pickable,consumable)
                 self.items.append(item)
-
-        self.apple = self.get_item_by_name("apple")
-        self.magic_potion = self.get_item_by_name("potion")
-        self.binocular = self.get_item_by_name("tree")
-        self.tree = self.get_item_by_name("binocular")
-
 
     def get_location_by_name(self,location_name):
         for location in self.locations:
@@ -89,11 +81,9 @@ class Record():
         return None
 
     def set_items_to_locations(self):
-        self.playground.add_item(self.tree)
-        self.playground.add_item(self.magic_potion)
-
-        self.beach.add_item(self.apple)
-        self.playground.add_item(self.binocular)
+        for item in self.items:
+            random_location = random.choice(self.locations)
+            random_location.add_item(item)
 
     def load_creatures(self):
         file_name = "creatures.csv"
@@ -119,7 +109,6 @@ class Record():
     def spwan_creature_to_random_location(self,creature):
         random_location = random.choice(self.locations)
         creature.spawn(random_location)
-
 
     def get_creature_by_name(self,creature_name):
         for creature in self.creatures:
